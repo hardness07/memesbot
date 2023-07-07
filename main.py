@@ -22,7 +22,6 @@ mem_list_bot = {
 
 }
 
-
 #создание меню кнопок
 @bot.message_handler(commands=['help',  'start'])
 async def send_hello(message):
@@ -42,7 +41,6 @@ async def send_hello(message):
     markup.add(four_b, five_b, six_b, row_width=3)
     await bot.send_message(chat_id, '✨Menu✨', reply_markup=markup)
 
-
 @bot.message_handler(func=lambda message: True)
 async def handle_message(message):
     print(message.text)
@@ -53,7 +51,7 @@ async def handle_message(message):
             await bot.send_audio(chat_id, mem_list_bot[list_button_text[i]])
             break
     else:
-        await bot.send_message(chat_id, 'Это появится позже!')   
+        await bot.send_message(chat_id, 'Это появится позже!')
 
 import asyncio
 asyncio.run(bot.polling())
