@@ -9,6 +9,19 @@ load_dotenv(find_dotenv())
 TOKEN = os.getenv('TOKEN')
 bot = AsyncTeleBot(TOKEN, parse_mode='HTML')
 
+list_button_text = ['2023', '2022', '2021', '2020','2019', '2018', '2017', '2016']
+mem_list_bot = {
+    '2023' : 'https://zvukogram.com/mp3/cats/1200/ya-musulman.mp3',
+    '2022' : 'https://zvukogram.com/mp3/cats/1200/chin-chan-chon-chi-chicha-chochi.mp3',
+    '2021' : 'https://zvukogram.com/mp3/cats/1200/ahaha-razryivnaya.mp3',
+    '2020' : 'https://zvukogram.com/mp3/cats/1200/o-povezlo-povezlo.mp3',
+    '2019' : 'https://zvukogram.com/mp3/cats/1200/es-minus-ehuuu.mp3',
+    '2018' : 'https://zvukogram.com/mp3/cats/1200/lya-tyi-kryisa1.mp3',
+    '2017' : 'https://zvukogram.com/mp3/cats/1200/opa-kogo-to-hlopnuli.mp3',
+    '2016' : 'https://zvukogram.com/mp3/cats/1200/otdai-salo.mp3'
+
+}
+
 
 #создание меню кнопок
 @bot.message_handler(commands=['help',  'start'])
@@ -29,122 +42,18 @@ async def send_hello(message):
     markup.add(four_b, five_b, six_b, row_width=3)
     await bot.send_message(chat_id, '✨Menu✨', reply_markup=markup)
 
-@bot.message_handler(commands=['a', 'mem2023'])
-async def send_dada(message):
-    chat_id = message.from_user.id
-    await bot.send_audio(chat_id, 'https://zvukogram.com/mp3/cats/1200/ya-musulman.mp3')
 
-@bot.message_handler(commands=['a', 'mem2022'])
-async def send_nono(message):
-    chat_id = message.from_user.id
-    await bot.send_audio(chat_id, 'https://zvukogram.com/mp3/cats/1200/chin-chan-chon-chi-chicha-chochi.mp3')
-
-@bot.message_handler(commands=['a', 'mem2021'])
-async def send_youtube(message):
-    chat_id = message.from_user.id
-    await bot.send_audio(chat_id, 'https://zvukogram.com/mp3/cats/1200/ahaha-razryivnaya.mp3')
-
-@bot.message_handler(commands=['b', 'mem2020'])
-async def send_tikt(message):
-    chat_id = message.from_user.id
-    await bot.send_audio(chat_id, 'https://zvukogram.com/mp3/cats/1200/o-povezlo-povezlo.mp3')
-
-@bot.message_handler(commands=['c', 'mem2019'])
-async def send_razrv(message):
-    chat_id = message.from_user.id
-    await bot.send_audio(chat_id, 'https://zvukogram.com/mp3/cats/1200/es-minus-ehuuu.mp3')
-
-@bot.message_handler(commands=['d', 'mem2018'])
-async def send_funny(message):
-    chat_id = message.from_user.id
-    await bot.send_audio(chat_id, 'https://zvukogram.com/mp3/cats/1200/lya-tyi-kryisa1.mp3')
-
-@bot.message_handler(commands=['e', 'mem2017'])
-async def send_smehe(message):
-    chat_id = message.from_user.id
-    await bot.send_audio(chat_id, 'https://zvukogram.com/mp3/cats/1200/opa-kogo-to-hlopnuli.mp3')
-
-@bot.message_handler(commands=['f', 'mem2016'])
-async def send_smex(message):
-    chat_id = message.from_user.id
-    await bot.send_audio(chat_id, 'https://zvukogram.com/mp3/cats/1200/otdai-salo.mp3')
-
-
-
-@bot.callback_query_handler(func=lambda call:True)
-async def handle_callback(call):
-    chat_id = call.message.chat.id
-    button_call = call.data
-    if button_call == '2021':
-        await bot.send_message(chat_id, '/mem2021')
-    elif button_call == '2020':
-        await bot.send_message(chat_id, '/mem2020')
-    elif button_call == '2019':
-        await bot.send_message(chat_id, '/mem2019')
-    elif button_call == '2018':
-        await bot.send_message(chat_id, '/mem2018')
-    elif button_call == '2017':
-        await bot.send_message(chat_id, '/mem2017')
-    elif button_call == '2016':
-        await bot.send_message(chat_id, '/mem2016')
-    elif button_call == '2023':
-        await bot.send_message(chat_id, '/mem2023')
-    elif button_call == '2022':
-        await bot.send_message(chat_id, '/mem2022')
+@bot.message_handler(func=lambda message: True)
+async def handle_message(message):
+    print(message.text)
+    chat_id = message.chat.id
+    text = message.text
+    for i in range(len(list_button_text)):
+        if list_button_text[i] in text:
+            await bot.send_audio(chat_id, mem_list_bot[list_button_text[i]])
+            break
     else:
-        await bot.send_message(chat_id, 'Вы попали не туда...')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        await bot.send_message(chat_id, 'Это появится позже!')
 
 import asyncio
 asyncio.run(bot.polling())
